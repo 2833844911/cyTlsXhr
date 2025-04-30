@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浏览器代理客户端</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        #logs {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 80px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            text-align: left;
+            font-size: 12px;
+        }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        .status {
+            font-weight: bold;
+            font-size: 24px;
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .connected { 
+            color: white;
+            background-color: green; 
+        }
+        .disconnected { 
+            color: white;
+            background-color: red; 
+        }
+        .connecting { 
+            color: white;
+            background-color: orange; 
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>浏览器代理</h1>
+    
+    <div class="status disconnected" id="status">未连接</div>
+    
+    <div id="logs" class="hidden"></div>
+
+    <script>
+        let socket = null;
+        let clientId = null;
+        let reconnectTimeout = null;
+        let reconnectAttempts = 0;
+        const maxReconnectAttempts = 100; // 最大重连次数
+        let proxyAddress = "未知";
+        let proxyId = "未知"; // 添加proxyId变量
+        
+        const statusDiv = document.getElementById('status');
+        const logsDiv = document.getElementById('logs');
+
+        // 获取URL参数
+        function getUrlParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // 尝试从URL获取代理地址参数和代理ID
+        function detectProxyAddress() {
+            // 从URL参数中获取代理地址
+            const proxyParam = getUrlParam('proxy');
+            if (proxyParam) {
+                proxyAddress = proxyParam;
+                log(`检测到代理地址参数: ${proxyAddress}`);
+            }
+
+            // 获取代理ID参数
+            const proxyIdParam = getUrlParam('proxy_id');
+            if (proxyIdParam) {
+                proxyId = proxyIdParam;
+                log(`检测到代理ID参数: ${proxyId}`);
+            }
+
+            // 如果没有直接参数，尝试通过其他方式检测
+            if (!proxyParam) {
+                try {
+                    // 使用简单的方法: 获取URL中的proxy参数
+                    const queryString = window.location.search;
+                    const urlParams = new URLSearchParams(queryString);
+                    const proxy = urlParams.get('proxy');
+                    
+                    if (proxy) {
+                        proxyAddress = proxy;
+                        log(`检测到代理地址: ${proxyAddress}`);
+                    }
+                } catch (error) {
+                    log(`检测代理地址失败: ${error.message}`, 'error');
+                }
+            }
+        }
+
+        // 记录日志
+        function log(message, type = 'info') {
+            const logEntry = document.createElement('div');
+            logEntry.className = type;
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logsDiv.appendChild(logEntry);
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+            console.log(`[${type}] ${message}`);
+            
+            // 最多保留50条日志
+            while (logsDiv.children.length > 50) {
+                logsDiv.removeChild(logsDiv.firstChild);
+            }
+        }
+
+        // 获取浏览器版本信息
+        function getBrowserVersion() {
+            const userAgent = navigator.userAgent;
+            let version = "未知";
+            let browserName = "未知";
+
+            // 检测常见浏览器
+            if (userAgent.indexOf("Chrome") > -1) {
+                browserName = "Chrome";
+                const chromeVersion = userAgent.match(/Chrome\/(\d+\.\d+)/);
+                if (chromeVersion && chromeVersion[1]) {
+                    version = chromeVersion[1];
+                }
+            } else if (userAgent.indexOf("Firefox") > -1) {
+                browserName = "Firefox";
+                const firefoxVersion = userAgent.match(/Firefox\/(\d+\.\d+)/);
+                if (firefoxVersion && firefoxVersion[1]) {
+                    version = firefoxVersion[1];
+                }
+            } else if (userAgent.indexOf("Safari") > -1 && userAgent.indexOf("Chrome") === -1) {
+                browserName = "Safari";
+                const safariVersion = userAgent.match(/Version\/(\d+\.\d+)/);
+                if (safariVersion && safariVersion[1]) {
+                    version = safariVersion[1];
+                }
+            } else if (userAgent.indexOf("Edge") > -1 || userAgent.indexOf("Edg") > -1) {
+                browserName = "Edge";
+                const edgeVersion = userAgent.match(/Edge\/(\d+\.\d+)/) || userAgent.match(/Edg\/(\d+\.\d+)/);
+                if (edgeVersion && edgeVersion[1]) {
+                    version = edgeVersion[1];
+                }
+            }
+
+            return `${browserName} ${version}`;
+        }
+
+        // 更新连接状态
+        function updateStatus(status) {
+            switch(status) {
+                case 'connected':
+                statusDiv.textContent = '已连接';
+                statusDiv.className = 'status connected';
+                    break;
+                case 'disconnected':
+                statusDiv.textContent = '未连接';
+                statusDiv.className = 'status disconnected';
+                    break;
+                case 'connecting':
+                    statusDiv.textContent = '正在连接...';
+                    statusDiv.className = 'status connecting';
+                    break;
+            }
+        }
+
+        // 发送HTTP请求并返回结果
+        async function sendRequest(url, method, headers = {}, body = null) {
+            try {
+                const xhr = new XMLHttpRequest();
+                
+                log(`发送HTTP请求: ${method} ${url}`);
+                
+                // 使用同步XHR (第三个参数设为false)
+                xhr.open(method, url, false);
+
+                // 设置超时
+                xhr.timeout=20000;
+                xhr.responseType = 'arraybuffer';
+                
+                // 检查headers是否为数组格式
+                let headersObj = headers;
+                if (Array.isArray(headers)) {
+                    log(`检测到数组格式的headers，按顺序设置`);
+                    headersObj = {};
+                    // 将数组转换为对象，用于后续的内容类型检查
+                    for (const [key, value] of headers) {
+                        headersObj[key] = value;
+                    }
+                }
+                
+                // 根据内容类型设置适当的responseType
+                const contentTypeHeader = headersObj['Content-Type'] || headersObj['content-type'] || '';
+                const acceptHeader = headersObj['Accept'] || headersObj['accept'] || '';
+                
+                // 检查是否是二进制内容类型
+                const isBinaryContent = 
+                    acceptHeader.includes('image/') || 
+                    acceptHeader.includes('application/octet-stream') || 
+                    acceptHeader.includes('audio/') || 
+                    acceptHeader.includes('video/') ||
+                    contentTypeHeader.includes('image/') ||
+                    contentTypeHeader.includes('application/octet-stream') ||
+                    contentTypeHeader.includes('audio/') ||
+                    contentTypeHeader.includes('video/');
+                
+                /* 同步XHR不能设置responseType
+                if (isBinaryContent) {
+                    xhr.responseType = 'arraybuffer';
+                    log('设置响应类型为arraybuffer，用于处理二进制数据');
+                }
+                */
+                
+                // 设置Accept-Encoding头，禁用Brotli压缩
+                if (!headersObj['Accept-Encoding'] && !headersObj['accept-encoding']) {
+                    if (Array.isArray(headers)) {
+                        // 为数组格式添加Accept-Encoding
+                        headers.push(["Accept-Encoding", "gzip, deflate"]);
+                    } else {
+                        headers['Accept-Encoding'] = 'gzip, deflate';
+                    }
+                }
+                
+                // 设置请求头
+                var idxInfo = 0
+                if (Array.isArray(headers)) {
+                    // 按数组顺序设置头
+                    for (const [key, value] of headers) {
+                        try {
+                            if (key == 'host' || key == 'Host'){
+                                continue
+                            }
+                            xhr.setRequestHeader("Cbb_"+idxInfo+"_"+key, value);
+                            idxInfo += 1
+                            log(`按顺序设置请求头: ${key} = ${value}`);
+                        } catch(e) {
+                            // log(`设置请求头出错: ${e.message}`, 'error');
+                        }
+                    }
+                } else {
+                    // 使用对象格式设置头（原始方式）
+
+                    for (const [key, value] of Object.entries(headers)) {
+                        try{
+                            xhr.setRequestHeader("Cbb_"+idxInfo+"_"+key, value);
+                            idxInfo += 1
+                        }catch(e){
+                            // log(`设置请求头出错: ${e.message}`, 'error');
+                        }
+                    }
+                }
+                
+                // 发送请求
+                if (body) {
+                    xhr.send(body);
+                } else {
+                    xhr.send();
+                }
+                
+                // 获取响应头
+                const responseHeaders = {};
+                const headerString = xhr.getAllResponseHeaders();
+                const headerLines = headerString.trim().split(/[\r\n]+/);
+                
+                headerLines.forEach(line => {
+                    const parts = line.split(': ');
+                    const header = parts.shift();
+                    const value = parts.join(': ');
+                    responseHeaders[header] = value;
+                });
+                
+                // 获取响应体
+                let responseData;
+
+                responseData = arrayBufferToBase64(xhr.response);
+                
+                return {
+                    ok: xhr.status >= 200 && xhr.status < 300,
+                    status: xhr.status,
+                    statusText: xhr.statusText,
+                    headers: responseHeaders,
+                    data: responseData
+                };
+                
+            } catch (error) {
+                log(`请求出错: ${error.message}`, 'error');
+                return {
+                    ok: false,
+                    error: error.message
+                };
+            }
+        }
+
+        // ArrayBuffer 转 Base64，支持 UTF-8 编码
+       function arrayBufferToBase64(buffer) {
+          let binary = '';
+          const bytes = new Uint8Array(buffer);
+          const len = bytes.byteLength;
+
+          for (let i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+          }
+
+          return btoa(binary);
+        }
+
+        
+        // 将原始字节数组转换为base64
+        function _rawBytesToBase64(bytes) {
+            let binary = '';
+            const len = bytes.byteLength;
+            for (let i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return window.btoa(binary);
+        }
+        
+        // 将原始字符串逐字节编码为base64
+        function _rawStringToBase64(str) {
+            // 将字符串转换为UTF-8编码的字节数组
+            const encoder = new TextEncoder();
+            const bytes = encoder.encode(str);
+            return _rawBytesToBase64(bytes);
+        }
+
+        // 连接到WebSocket服务器
+        function connectToServer() {
+            if (socket && socket.readyState === WebSocket.CONNECTING) {
+                log('正在连接中，请稍候', 'info');
+                return;
+            }
+            
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                log('已经连接到服务器', 'info');
+                return;
+            }
+            
+            // 清除可能存在的重连计时器
+            if (reconnectTimeout) {
+                clearTimeout(reconnectTimeout);
+                reconnectTimeout = null;
+            }
+            
+            updateStatus('connecting');
+
+            // 获取当前主机和协议
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            // 默认连接到同一主机的8766端口
+            const wsUrl = `${protocol}//${window.location.hostname}:8766/ws`;
+            
+            try {
+                log(`尝试连接到 ${wsUrl}`);
+                socket = new WebSocket(wsUrl);
+
+                socket.onopen = function(event) {
+                    log('成功连接到WebSocket服务器', 'success');
+                    updateStatus('connected');
+                    reconnectAttempts = 0; // 重置重连次数
+                    
+                    // 获取或尝试检测代理地址
+                    detectProxyAddress();
+                    
+                    // 获取浏览器版本
+                    const browserVersion = getBrowserVersion();
+                    log(`浏览器版本: ${browserVersion}`);
+                    
+                    // 向服务器发送客户端类型信息
+                    socket.send(JSON.stringify({
+                        type: 'client_info',
+                        client_type: 'browser',
+                        client_name: `浏览器 ${Math.floor(Math.random() * 1000)}`,
+                        proxy: proxyAddress,
+                        proxy_id: proxyId, // 添加代理ID信息
+                        version: browserVersion
+                    }));
+                };
+
+                socket.onmessage = async function(event) {
+                    const message = event.data;
+                    try {
+                        const data = JSON.parse(message);
+                        log(`收到服务器消息: ${JSON.stringify(data).slice(0, 100)}${JSON.stringify(data).length > 100 ? '...' : ''}`);
+                        
+                        if (data.type === 'client_info_response') {
+                            // 服务器返回客户端信息
+                            clientId = data.client_id;
+                            log(`服务器已分配客户端ID: ${clientId}`, 'info');
+                        }
+                        else if (data.type === 'execute_request') {
+                            // 服务器要求执行HTTP请求
+                            const requestId = data.id;
+                            const params = data.params;
+                            // 解码 base64 到二进制
+                            function base64ToUint8Array(base64) {
+                              const binaryStr = atob(base64);
+                              const len = binaryStr.length;
+                              const bytes = new Uint8Array(len);
+                              for (let i = 0; i < len; i++) {
+                                bytes[i] = binaryStr.charCodeAt(i);
+                              }
+                              return bytes;
+                            }
+
+
+                            log(`执行请求: ${params.method} ${params.url}`);
+                            if (params.bodyType == 'b64'){
+                                 var binaryData = base64ToUint8Array(params.body);
+                                params.body = binaryData
+                            }
+                            
+                            // 执行请求
+                            const result = await sendRequest(
+                                params.url,
+                                params.method || 'GET',
+                                params.headers || {},
+                                params.body
+                            );
+                            
+                            // 将结果发送回服务器
+                            socket.send(JSON.stringify({
+                                type: 'response',
+                                id: requestId,
+                                data: result
+                            }));
+                            
+                            log(`请求完成: ${params.url}`, 'success');
+                        }
+                    } catch (error) {
+                        log(`解析消息出错: ${error.message}`, 'error');
+                    }
+                };
+
+                socket.onclose = function(event) {
+                    log(`连接已关闭: ${event.reason}`, event.wasClean ? 'info' : 'error');
+                    socket = null;
+                    updateStatus('disconnected');
+                    scheduleReconnect();
+                };
+
+                socket.onerror = function(error) {
+                    log(`WebSocket错误`, 'error');
+                    updateStatus('disconnected');
+                };
+            } catch (error) {
+                log(`创建WebSocket连接出错: ${error.message}`, 'error');
+                updateStatus('disconnected');
+                scheduleReconnect();
+            }
+        }
+        
+        // 安排重新连接
+        function scheduleReconnect() {
+            if (reconnectAttempts >= maxReconnectAttempts) {
+                log(`已达到最大重连次数 (${maxReconnectAttempts})，停止重连`, 'error');
+                return;
+            }
+            
+            reconnectAttempts++;
+            
+            // 清除现有的超时
+            if (reconnectTimeout) {
+                clearTimeout(reconnectTimeout);
+            }
+            
+            log(`将在10秒后尝试重新连接 (尝试 ${reconnectAttempts}/${maxReconnectAttempts})`, 'info');
+            
+            reconnectTimeout = setTimeout(() => {
+                log('正在尝试重新连接...', 'info');
+                connectToServer();
+            }, 10000); // 10秒后重连
+        }
+
+        // 客户端ID
+        let ws = null;
+
+        // 发送消息到服务器
+        function sendMessageToServer(message) {
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify(message));
+                console.log(`已发送消息到服务器: ${message.type}`);
+            } else {
+                console.error('WebSocket连接未建立或已关闭');
+            }
+        }
+
+        // 修改原有的WebSocket消息处理函数，添加XHR请求支持
+        function handleWebSocketMessage(event) {
+            try {
+                const message = JSON.parse(event.data);
+                
+                if (message.type === "execute_request") {
+                    // 使用XHR异步处理请求
+                    handleXHRRequest(message);
+                } else if (message.type === "client_info_response") {
+                    clientId = message.client_id;
+                    console.log(`服务器已分配客户端ID: ${clientId}`);
+                }
+            } catch (e) {
+                console.error(`处理WebSocket消息失败: ${e.message}`);
+            }
+        }
+
+        // 初始化WebSocket连接 - 这个函数会被废弃，不再使用
+        function initWebSocket() {
+            console.warn("initWebSocket函数已废弃，请使用connectToServer函数");
+        }
+
+        // 修改页面加载事件，确保只连接一次WebSocket
+        window.addEventListener('load', function() {
+            // 显示/隐藏日志（双击状态栏）
+            statusDiv.addEventListener('dblclick', function() {
+                logsDiv.classList.toggle('hidden');
+            });
+            
+            // 延迟1秒后连接，确保页面完全加载
+            setTimeout(connectToServer, 1000);
+            
+            // 添加XHR支持
+            socket = null; // 确保不会创建重复连接
+            log("已启用XHR异步请求处理", "info");
+        });
+        
+        // 检测页面可见性变化，在页面变为可见时尝试重新连接
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'visible' && (!socket || socket.readyState !== WebSocket.OPEN)) {
+                log('页面变为可见，尝试重新连接', 'info');
+                connectToServer();
+            }
+        });
+
+        // 添加XHR异步请求处理函数
+        function handleXHRRequest(requestData) {
+            const params = requestData.params;
+            const url = params.url;
+            const method = params.method || 'GET';
+            const headers = params.headers || {};
+            const body = params.body;
+            const requestId = requestData.id;
+
+            console.log(`开始处理XHR请求: ${method} ${url}`);
+            
+            // 使用简化版的sendRequest进行处理
+            // 由于我们已经对sendRequest函数进行了修改以支持数组格式的headers
+            // 这里直接调用它来处理请求，确保一致性
+            const result = sendRequest(url, method, headers, body);
+            
+            // 构建响应对象并发送
+            const responseData = {
+                type: "response",
+                id: requestId,
+                data: result
+            };
+            
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify(responseData));
+                console.log(`请求完成: ${url}, 状态: ${result.status}`);
+            } else {
+                console.error('WebSocket连接未建立或已关闭，无法发送响应');
+            }
+        }
+    </script>
+</body>
+</html> 

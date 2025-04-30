@@ -1,0 +1,394 @@
+{
+  "ListenAddr": "0.0.0.0:8080",
+  "CredStore": {},
+  "AdminUsername": "admin",
+  "AdminPassword": "admin",
+  "WebPort": "8081",
+  "Status": {
+    "running": false,
+    "start_time": "0001-01-01T00:00:00Z",
+    "connection_count": 0
+  },
+  "StatsManager": {
+    "total_requests": 8940,
+    "domain_stats": {
+      "47.96.159.147": {
+        "domain": "47.96.159.147",
+        "count": 74,
+        "last_visit": "2025-04-18T15:18:17.8234941+08:00"
+      },
+      "accounts.google.com": {
+        "domain": "accounts.google.com",
+        "count": 375,
+        "last_visit": "2025-04-30T17:39:17.916747+08:00"
+      },
+      "accounts.maersk.com": {
+        "domain": "accounts.maersk.com",
+        "count": 201,
+        "last_visit": "2025-04-23T23:33:04.0434118+08:00"
+      },
+      "ajet.com": {
+        "domain": "ajet.com",
+        "count": 8,
+        "last_visit": "2025-04-18T17:05:31.1467706+08:00"
+      },
+      "analytics.skyscanner.net": {
+        "domain": "analytics.skyscanner.net",
+        "count": 1,
+        "last_visit": "2025-04-23T10:43:14.0643111+08:00"
+      },
+      "android.clients.google.com": {
+        "domain": "android.clients.google.com",
+        "count": 559,
+        "last_visit": "2025-04-30T17:39:19.931463+08:00"
+      },
+      "api.hcaptcha.com": {
+        "domain": "api.hcaptcha.com",
+        "count": 48,
+        "last_visit": "2025-04-21T12:20:05.7943101+08:00"
+      },
+      "api2.bybit.com": {
+        "domain": "api2.bybit.com",
+        "count": 8,
+        "last_visit": "2025-04-22T16:09:17.2835315+08:00"
+      },
+      "apis.google.com": {
+        "domain": "apis.google.com",
+        "count": 4,
+        "last_visit": "2025-04-23T10:43:10.0194752+08:00"
+      },
+      "assets.maerskline.com": {
+        "domain": "assets.maerskline.com",
+        "count": 2,
+        "last_visit": "2025-04-21T21:30:55.84184+08:00"
+      },
+      "c.la1-c2-lo2.salesforceliveagent.com": {
+        "domain": "c.la1-c2-lo2.salesforceliveagent.com",
+        "count": 1,
+        "last_visit": "2025-04-23T10:43:10.4836002+08:00"
+      },
+      "cdn.optimizely.com": {
+        "domain": "cdn.optimizely.com",
+        "count": 2,
+        "last_visit": "2025-04-22T08:51:26.0163437+08:00"
+      },
+      "chrome.google.com": {
+        "domain": "chrome.google.com",
+        "count": 1,
+        "last_visit": "2025-04-21T12:16:49.6821818+08:00"
+      },
+      "cip.cc": {
+        "domain": "cip.cc",
+        "count": 33,
+        "last_visit": "2025-04-21T12:23:33.5706791+08:00"
+      },
+      "clients2.google.com": {
+        "domain": "clients2.google.com",
+        "count": 140,
+        "last_visit": "2025-04-30T17:39:17.9000559+08:00"
+      },
+      "connect.facebook.net": {
+        "domain": "connect.facebook.net",
+        "count": 2,
+        "last_visit": "2025-04-23T10:43:14.5367286+08:00"
+      },
+      "content-autofill.googleapis.com": {
+        "domain": "content-autofill.googleapis.com",
+        "count": 2,
+        "last_visit": "2025-04-22T08:51:29.1277243+08:00"
+      },
+      "dl.google.com": {
+        "domain": "dl.google.com",
+        "count": 11,
+        "last_visit": "2025-04-20T13:18:23.523352+08:00"
+      },
+      "doh.cq0.co": {
+        "domain": "doh.cq0.co",
+        "count": 2,
+        "last_visit": "2025-04-22T08:51:28.7450347+08:00"
+      },
+      "edgedl.me.gvt1.com": {
+        "domain": "edgedl.me.gvt1.com",
+        "count": 35,
+        "last_visit": "2025-04-25T09:34:42.31958+08:00"
+      },
+      "execution-ci360.flypgs.com": {
+        "domain": "execution-ci360.flypgs.com",
+        "count": 2,
+        "last_visit": "2025-04-23T10:43:14.2071897+08:00"
+      },
+      "fonts.googleapis.com": {
+        "domain": "fonts.googleapis.com",
+        "count": 1,
+        "last_visit": "2025-04-23T10:43:10.4438928+08:00"
+      },
+      "fonts.gstatic.com": {
+        "domain": "fonts.gstatic.com",
+        "count": 1,
+        "last_visit": "2025-04-23T10:43:10.9135132+08:00"
+      },
+      "gatewayweb.cloud.ajet.com": {
+        "domain": "gatewayweb.cloud.ajet.com",
+        "count": 1,
+        "last_visit": "2025-04-18T17:03:35.4508874+08:00"
+      },
+      "google.com": {
+        "domain": "google.com",
+        "count": 4,
+        "last_visit": "2025-04-21T10:44:18.4912936+08:00"
+      },
+      "hector.baidu.com": {
+        "domain": "hector.baidu.com",
+        "count": 1,
+        "last_visit": "2025-04-20T13:38:55.2220175+08:00"
+      },
+      "hectorstatic.baidu.com": {
+        "domain": "hectorstatic.baidu.com",
+        "count": 1,
+        "last_visit": "2025-04-20T13:38:54.9458429+08:00"
+      },
+      "js.adara.com": {
+        "domain": "js.adara.com",
+        "count": 1,
+        "last_visit": "2025-04-23T10:43:11.9078303+08:00"
+      },
+      "js.bkmexpress.com.tr": {
+        "domain": "js.bkmexpress.com.tr",
+        "count": 1,
+        "last_visit": "2025-04-23T10:43:14.0447357+08:00"
+      },
+      "js.hcaptcha.com": {
+        "domain": "js.hcaptcha.com",
+        "count": 126,
+        "last_visit": "2025-04-21T12:21:28.0753175+08:00"
+      },
+      "jsres.adara.com": {
+        "domain": "jsres.adara.com",
+        "count": 1,
+        "last_visit": "2025-04-23T10:43:13.9174465+08:00"
+      },
+      "logx.optimizely.com": {
+        "domain": "logx.optimizely.com",
+        "count": 2,
+        "last_visit": "2025-04-22T08:51:25.9495008+08:00"
+      },
+      "mbd.baidu.com": {
+        "domain": "mbd.baidu.com",
+        "count": 6,
+        "last_visit": "2025-04-20T13:39:00.3441783+08:00"
+      },
+      "mtalk.google.com": {
+        "domain": "mtalk.google.com",
+        "count": 4478,
+        "last_visit": "2025-04-30T17:39:19.9309784+08:00"
+      },
+      "ogads-pa.clients6.google.com": {
+        "domain": "ogads-pa.clients6.google.com",
+        "count": 5,
+        "last_visit": "2025-04-23T10:43:10.0129502+08:00"
+      },
+      "p11.techlab-cdn.com": {
+        "domain": "p11.techlab-cdn.com",
+        "count": 8,
+        "last_visit": "2025-04-22T08:51:26.6889805+08:00"
+      },
+      "passport.baidu.com": {
+        "domain": "passport.baidu.com",
+        "count": 1,
+        "last_visit": "2025-04-20T13:38:56.0290603+08:00"
+      },
+      "pegasus.api.useinsider.com": {
+        "domain": "pegasus.api.useinsider.com",
+        "count": 3,
+        "last_visit": "2025-04-23T10:43:14.1875732+08:00"
+      },
+      "play.google.com": {
+        "domain": "play.google.com",
+        "count": 5,
+        "last_visit": "2025-04-23T10:43:10.4556549+08:00"
+      },
+      "policy.app.cookieinformation.com": {
+        "domain": "policy.app.cookieinformation.com",
+        "count": 4,
+        "last_visit": "2025-04-21T21:30:55.3884549+08:00"
+      },
+      "privacy.easyjet.com": {
+        "domain": "privacy.easyjet.com",
+        "count": 2,
+        "last_visit": "2025-04-22T08:51:26.6810755+08:00"
+      },
+      "pss.bdstatic.com": {
+        "domain": "pss.bdstatic.com",
+        "count": 7,
+        "last_visit": "2025-04-20T13:38:54.9018499+08:00"
+      },
+      "r1---sn-ni5een7z.gvt1-cn.com": {
+        "domain": "r1---sn-ni5een7z.gvt1-cn.com",
+        "count": 7,
+        "last_visit": "2025-04-20T13:18:23.2648609+08:00"
+      },
+      "r1---sn-oguesn6k.gvt1.com": {
+        "domain": "r1---sn-oguesn6k.gvt1.com",
+        "count": 2,
+        "last_visit": "2025-04-18T23:36:41.4996989+08:00"
+      },
+      "r2---sn-ni5eln7z.gvt1-cn.com": {
+        "domain": "r2---sn-ni5eln7z.gvt1-cn.com",
+        "count": 7,
+        "last_visit": "2025-04-20T13:18:23.2677709+08:00"
+      },
+      "r4---sn-ogul7n76.gvt1.com": {
+        "domain": "r4---sn-ogul7n76.gvt1.com",
+        "count": 4,
+        "last_visit": "2025-04-18T23:36:41.5668394+08:00"
+      },
+      "r5---sn-oguelnle.gvt1.com": {
+        "domain": "r5---sn-oguelnle.gvt1.com",
+        "count": 2,
+        "last_visit": "2025-04-18T23:36:41.5662262+08:00"
+      },
+      "redirector.gvt1.com": {
+        "domain": "redirector.gvt1.com",
+        "count": 48,
+        "last_visit": "2025-04-21T10:42:14.6036209+08:00"
+      },
+      "safebrowsing.googleapis.com": {
+        "domain": "safebrowsing.googleapis.com",
+        "count": 206,
+        "last_visit": "2025-04-30T17:33:54.6588847+08:00"
+      },
+      "sdk.adara.com": {
+        "domain": "sdk.adara.com",
+        "count": 1,
+        "last_visit": "2025-04-23T10:43:14.4270346+08:00"
+      },
+      "sns-img-hw.xhscdn.com": {
+        "domain": "sns-img-hw.xhscdn.com",
+        "count": 1,
+        "last_visit": "2025-04-21T10:35:26.7589322+08:00"
+      },
+      "sp1.baidu.com": {
+        "domain": "sp1.baidu.com",
+        "count": 2,
+        "last_visit": "2025-04-20T13:38:55.1093363+08:00"
+      },
+      "sp2.baidu.com": {
+        "domain": "sp2.baidu.com",
+        "count": 1,
+        "last_visit": "2025-04-20T13:38:55.1196108+08:00"
+      },
+      "t.captcha.qq.com": {
+        "domain": "t.captcha.qq.com",
+        "count": 3,
+        "last_visit": "2025-04-18T14:33:17.7468036+08:00"
+      },
+      "update.googleapis.com": {
+        "domain": "update.googleapis.com",
+        "count": 340,
+        "last_visit": "2025-04-30T17:40:17.8832549+08:00"
+      },
+      "web.flypgs.com": {
+        "domain": "web.flypgs.com",
+        "count": 80,
+        "last_visit": "2025-04-24T14:20:06.6101028+08:00"
+      },
+      "web.pisano.com.tr": {
+        "domain": "web.pisano.com.tr",
+        "count": 1,
+        "last_visit": "2025-04-23T10:43:14.0643111+08:00"
+      },
+      "www.baidu.com": {
+        "domain": "www.baidu.com",
+        "count": 11,
+        "last_visit": "2025-04-25T14:40:08.2025861+08:00"
+      },
+      "www.bilibili.com": {
+        "domain": "www.bilibili.com",
+        "count": 2,
+        "last_visit": "2025-04-25T14:43:32.7376345+08:00"
+      },
+      "www.bybit.com": {
+        "domain": "www.bybit.com",
+        "count": 11,
+        "last_visit": "2025-04-22T16:08:57.4162454+08:00"
+      },
+      "www.easyjet.com": {
+        "domain": "www.easyjet.com",
+        "count": 609,
+        "last_visit": "2025-04-25T10:02:29.9275401+08:00"
+      },
+      "www.flypgs.com": {
+        "domain": "www.flypgs.com",
+        "count": 1,
+        "last_visit": "2025-04-23T10:43:13.5228245+08:00"
+      },
+      "www.google.com": {
+        "domain": "www.google.com",
+        "count": 1390,
+        "last_visit": "2025-04-30T17:39:22.70878+08:00"
+      },
+      "www.googletagmanager.com": {
+        "domain": "www.googletagmanager.com",
+        "count": 5,
+        "last_visit": "2025-04-23T10:43:11.3243611+08:00"
+      },
+      "www.gstatic.com": {
+        "domain": "www.gstatic.com",
+        "count": 13,
+        "last_visit": "2025-04-23T10:43:09.4732947+08:00"
+      },
+      "www.hcaptcha.com": {
+        "domain": "www.hcaptcha.com",
+        "count": 1,
+        "last_visit": "2025-04-21T10:53:09.3618845+08:00"
+      },
+      "www.jal.co.jp": {
+        "domain": "www.jal.co.jp",
+        "count": 11,
+        "last_visit": "2025-04-09T17:22:42.8128714+08:00"
+      },
+      "www.jetstar.com": {
+        "domain": "www.jetstar.com",
+        "count": 6,
+        "last_visit": "2025-04-23T14:07:00.0742833+08:00"
+      },
+      "www.jsvmp.com": {
+        "domain": "www.jsvmp.com",
+        "count": 1,
+        "last_visit": "2025-04-18T11:50:45.2886857+08:00"
+      },
+      "www.s7.ru": {
+        "domain": "www.s7.ru",
+        "count": 3,
+        "last_visit": "2025-04-24T16:31:31.554809+08:00"
+      },
+      "www.xiaohongshu.com": {
+        "domain": "www.xiaohongshu.com",
+        "count": 1,
+        "last_visit": "2025-04-18T11:51:34.0806015+08:00"
+      }
+    }
+  },
+  "UseForwardProxy": false,
+  "AllowAnonymous": true,
+  "RemoteProxyAddr": "127.0.0.1:7890",
+  "RemoteProxyUser": "dsdddd",
+  "RemoteProxyPass": "dsdddd",
+  "ProxyPorts": {
+    "default": {
+      "id": "default",
+      "listen_addr": "0.0.0.0:8080",
+      "enabled": true,
+      "status": {
+        "running": true,
+        "start_time": "2025-04-30T17:39:14.2294564+08:00",
+        "connection_count": 7
+      },
+      "allow_anonymous": true,
+      "use_forward_proxy": true,
+      "remote_proxy_addr": "127.0.0.1:21882",
+      "remote_proxy_user": "juluser1-country-jp-session-KbgDwvvUev",
+      "remote_proxy_pass": "juluser1"
+    }
+  }
+}

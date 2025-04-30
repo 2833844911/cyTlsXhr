@@ -1,0 +1,670 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Microsoft YaHei', Arial, sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* 登录页面样式 */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f2f5;
+}
+
+.login-box {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 380px;
+}
+
+.login-box h2 {
+    text-align: center;
+    margin-bottom: 24px;
+    color: #1890ff;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #1890ff;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+    outline: none;
+}
+
+.btn-login {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: #1890ff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-login:hover {
+    background-color: #40a9ff;
+}
+
+.error-message {
+    color: #f5222d;
+    margin-bottom: 16px;
+    text-align: center;
+    min-height: 20px;
+}
+
+/* 仪表盘样式 */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.dashboard-header {
+    background-color: #001529;
+    color: white;
+    padding: 0 20px;
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-header h1 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-info span {
+    margin-right: 16px;
+}
+
+.btn-logout {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-logout:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dashboard-content {
+    display: flex;
+    flex: 1;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #001529;
+    color: white;
+    padding-top: 20px;
+}
+
+.nav-menu {
+    list-style: none;
+}
+
+.nav-menu li {
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.nav-menu li:hover {
+    background-color: #1890ff;
+}
+
+.nav-menu li.active {
+    background-color: #1890ff;
+    font-weight: 500;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    background-color: #f0f2f5;
+}
+
+.panel {
+    display: none;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.panel.active {
+    display: block;
+}
+
+.panel h2 {
+    margin-bottom: 20px;
+    color: #1890ff;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+/* 状态卡片样式 */
+.status-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.status-item {
+    display: flex;
+    margin-bottom: 16px;
+    align-items: center;
+}
+
+.status-item .label {
+    width: 120px;
+    font-weight: 500;
+}
+
+.status-indicator {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.status-indicator.running {
+    background-color: #52c41a;
+    color: white;
+}
+
+.status-indicator.stopped {
+    background-color: #f5222d;
+    color: white;
+}
+
+.status-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-action {
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s;
+}
+
+#start-proxy {
+    background-color: #52c41a;
+    color: white;
+}
+
+#start-proxy:hover {
+    background-color: #73d13d;
+}
+
+#stop-proxy {
+    background-color: #f5222d;
+    color: white;
+}
+
+#stop-proxy:hover {
+    background-color: #ff4d4f;
+}
+
+#stop-proxy:disabled {
+    background-color: #d9d9d9;
+    cursor: not-allowed;
+}
+
+/* 用户管理样式 */
+.user-list-container {
+    display: flex;
+    gap: 20px;
+}
+
+.user-table {
+    flex: 2;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.user-table th, .user-table td {
+    border: 1px solid #f0f0f0;
+    padding: 12px;
+    text-align: left;
+}
+
+.user-table th {
+    background-color: #fafafa;
+    font-weight: 500;
+}
+
+.user-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+.add-user-form {
+    flex: 1;
+    background-color: #fafafa;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.add-user-form h3 {
+    margin-bottom: 16px;
+    color: #1890ff;
+}
+
+.btn-add {
+    background-color: #1890ff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-add:hover {
+    background-color: #40a9ff;
+}
+
+.btn-delete {
+    background-color: #f5222d;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-delete:hover {
+    background-color: #ff4d4f;
+}
+
+/* 设置面板样式 */
+.settings-form {
+    max-width: 500px;
+}
+
+.btn-save {
+    background-color: #1890ff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.btn-save:hover {
+    background-color: #40a9ff;
+}
+
+/* 统计面板样式 */
+.stats-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.stats-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stats-card h3 {
+    margin-bottom: 16px;
+    color: #1890ff;
+}
+
+.stats-value {
+    font-size: 32px;
+    font-weight: bold;
+    color: #1890ff;
+}
+
+.stats-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stats-table th, .stats-table td {
+    border: 1px solid #f0f0f0;
+    padding: 12px;
+    text-align: left;
+}
+
+.stats-table th {
+    background-color: #fafafa;
+    font-weight: 500;
+}
+
+.stats-table-container {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.btn-reset {
+    background-color: #faad14;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    align-self: flex-start;
+}
+
+.btn-reset:hover {
+    background-color: #ffc53d;
+}
+
+/* 添加复选框样式 */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    width: auto;
+    height: auto;
+}
+
+.checkbox-group label {
+    margin: 0;
+    font-weight: normal;
+}
+
+/* 多端口管理样式 */
+.ports-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ports-list-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    overflow: auto;
+}
+
+.ports-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ports-table th, .ports-table td {
+    border: 1px solid #f0f0f0;
+    padding: 12px;
+    text-align: left;
+}
+
+.ports-table th {
+    background-color: #fafafa;
+    font-weight: 500;
+}
+
+.ports-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+.port-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-start {
+    background-color: #52c41a;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-start:hover {
+    background-color: #73d13d;
+}
+
+.btn-start:disabled {
+    background-color: #d9d9d9;
+    cursor: not-allowed;
+}
+
+.btn-stop {
+    background-color: #f5222d;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-stop:hover {
+    background-color: #ff4d4f;
+}
+
+.btn-edit {
+    background-color: #1890ff;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-edit:hover {
+    background-color: #40a9ff;
+}
+
+.add-port-form {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.add-port-form h3 {
+    margin-bottom: 16px;
+    color: #1890ff;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+/* 模态对话框样式 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 24px;
+    width: 500px;
+    max-width: 90%;
+}
+
+.modal-content h3 {
+    margin-bottom: 16px;
+    color: #1890ff;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-cancel {
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #d9d9d9;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-cancel:hover {
+    background-color: #e8e8e8;
+}
+
+/* 端口详情模态框 */
+.port-detail-modal .modal-content {
+    width: 700px;
+}
+
+.port-detail-tabs {
+    display: flex;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 20px;
+}
+
+.port-detail-tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s;
+}
+
+.port-detail-tab.active {
+    color: #1890ff;
+    border-bottom-color: #1890ff;
+}
+
+.port-detail-panel {
+    display: none;
+}
+
+.port-detail-panel.active {
+    display: block;
+}
+
+.port-info {
+    margin-bottom: 20px;
+}
+
+.port-info-item {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.port-info-label {
+    width: 120px;
+    font-weight: 500;
+    color: #666;
+}
+
+.port-info-value {
+    flex: 1;
+}
+
+/* 用户管理表格 */
+.port-users-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+}
+
+.port-users-table th, .port-users-table td {
+    border: 1px solid #f0f0f0;
+    padding: 10px;
+    text-align: left;
+}
+
+.port-users-table th {
+    background-color: #fafafa;
+}
+
+/* 代理转发设置 */
+.proxy-forward-settings {
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+.proxy-forward-settings.disabled {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* 表单提示信息 */
+.form-hint {
+    font-size: 0.8em;
+    color: #ff6b6b;
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+/* 禁用的表单元素 */
+input:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
