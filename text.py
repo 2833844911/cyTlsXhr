@@ -43,7 +43,7 @@ def send_request_POST() -> requests.Response:
                          json={'url': 'https://t.captcha.qq.com/cap_union_new_verify',
                                "headers": headers,
                                'method': 'POST',
-                               'bodyType': '',
+                               'bodyType': '', # 传2进制数据可以直接 'bodyType': 'b64' 下面的body是2进制的base64编码, 
                                  'client_id': 'be22165f-e3c3-4570-94f1-017ea57ae459',
                             "token": "d7bed4fd-9852-430f-9d2a-695d2641bf80",
                                "body": data,
