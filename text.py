@@ -47,7 +47,7 @@ def send_request_POST() -> requests.Response:
                                  'client_id': 'be22165f-e3c3-4570-94f1-017ea57ae459',
                             "token": "d7bed4fd-9852-430f-9d2a-695d2641bf80",
                                "body": data,
-                               'proxy': 'http://127.0.0.1:21882'
+                               'proxy': 'http://xxx.xxx.xxx.xxx:xxxx'
                                })
 
 
@@ -77,7 +77,7 @@ def send_request_GET() -> requests.Response:
                                                                     'method': 'GET',
                                                                     'bodyType': '',
                                                                      'client_id': 'be22165f-e3c3-4570-94f1-017ea57ae459',
-                                                                    'proxy': 'http://127.0.0.1:21882',
+                                                                    'proxy': 'http://xxx.xxx.xxx.xxx:xxxx',
                                                                              "token": "d7bed4fd-9852-430f-9d2a-695d2641bf80",
                                                                     })
 
