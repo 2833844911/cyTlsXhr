@@ -1,5 +1,5 @@
 ## cytlsxhr
-
+- 视频教程: https://www.bilibili.com/video/BV1pKVaz1EsX
 
 ### 介绍
 - 测试网站是否检测tls，该项目tls已经 经过各种测试应该是完美的134版本tls
